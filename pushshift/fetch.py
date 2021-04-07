@@ -6,13 +6,6 @@ import json
 import calendar
 import time
 
-# Instructions:
-#
-# Collect the most recent 2 hours of submissions
-# Scan against the last 3 months of copypasta
-# Add to file in day.month.year.{submissions|comments}.json format
-#
-
 
 def main():
 
