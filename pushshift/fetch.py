@@ -40,17 +40,16 @@ def main():
         end_month = now.month - (months_ago - 1)
         end_year = now.year
 
-        if end_month <= 0:
+        while end_month <= 0:
             end_month += 12
             end_year -= 1
 
         start_month = now.month - (months_ago)
         start_year = now.year
 
-        if start_month <= 0:
+        while start_month <= 0:
             start_month += 12
             start_year -= 1
-
         start_timestamp = int(datetime.datetime(
             start_year, start_month, 1).timestamp())
         end_timestamp = int(datetime.datetime(
