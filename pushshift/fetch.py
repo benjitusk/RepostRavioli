@@ -15,6 +15,11 @@ def main():
     total_time = time.time()
     now = datetime.datetime.now()
     monthcount = abs(int(input('Number of months to archive: ')))
+    months_to_skip = input('Number of months to skip: ')
+    if months_to_skip == '':
+        months_to_skip = 0
+    else:
+        months_to_skip = abs(int(months_to_skip))
     print('Preparing to archive the following months:')
     now = datetime.datetime.now()
     month = now.month
