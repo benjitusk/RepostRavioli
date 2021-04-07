@@ -24,14 +24,14 @@ def main():
     now = datetime.datetime.now()
     month = now.month
     year = now.year
-    for n in range(monthcount):
+    for n in range(months_to_skip - 1, monthcount):
         n += 2
         if month - n <= 0:
             month += 12
             year -= 1
         n_months_ago = month - n
         print(f'{n_months_ago}/{year}')
-    for months_ago in range(monthcount):
+    for months_ago in range(months_to_skip - 1, monthcount):
 
         months_ago += 2
 
@@ -55,7 +55,6 @@ def main():
 
         month = name_of_month(start_month).lower()
         month_entries = 0
-        # month_start = time.time()
 
         print(f'Starting archival for {month} {start_year}...')
         print(
