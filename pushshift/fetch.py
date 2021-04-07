@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 from psaw import PushshiftAPI
-from datetime import datetime
+import datetime
 from math import floor
 import json
-import os
 import calendar
 import time
 
@@ -21,10 +20,10 @@ def main():
     sub = 'copypasta'
     total_entries = 0
     total_time = time.time()
-    now = datetime.now()
+    now = datetime.datetime.now()
     monthcount = abs(int(input('Number of months to archive: ')))
     print('Preparing to archive the following months:')
-    now = datetime.now()
+    now = datetime.datetime.now()
     month = now.month
     year = now.year
     for n in range(monthcount):
@@ -52,38 +51,48 @@ def main():
             start_month += 12
             start_year -= 1
 
-        start_timestamp = int(datetime(start_year, start_month, 1).timestamp())
-        end_timestamp = int(datetime(end_year, end_month, 1).timestamp())
+        start_timestamp = int(datetime.datetime(
+            start_year, start_month, 1).timestamp())
+        end_timestamp = int(datetime.datetime(
+            end_year, end_month, 1).timestamp())
 
         month = name_of_month(start_month).lower()
         month_entries = 0
-        month_start = time.time()
+        # month_start = time.time()
 
         print(f'Starting archival for {month} {start_year}...')
-       print(
-           f'Starting submissions fetch for {month} {start_year} [{start_timestamp} - {end_timestamp}] at {time.ctime()}...')
-       new_fetch = list(api.search_submissions(
-           after=start_timestamp, before=end_timestamp, subreddit=sub))
-       print(
-           f'Finished submissions fetch for {month} {start_year}. This month contains {len(new_fetch)} submissions.')
-       total_entries += len(new_fetch)
-       month_entries += len(new_fetch)
-       print(f'Writing new submissions to disk')
-       with open(f'{month}.{start_year}.submissions.json', 'w') as output:
-           json.dump(new_fetch, output)
-
         print(
-            f'Starting comments fetch for {month} {start_year} [{start_timestamp} - {end_timestamp}]...')
+            f'Starting submissions fetch for {month} {start_year} [{start_timestamp} - {end_timestamp}] at {time.ctime()}...')
+        start_timer = time.ctime()
+        new_fetch = list(api.search_submissions(
+            after=start_timestamp, before=end_timestamp, subreddit=sub))
+        print(
+            f'Finished submissions fetch for {month} {start_year} after {get_time_from_seconds(time.ctime()-start_timer)}. This month contains {len(new_fetch)} submissions.')
+        total_entries += len(new_fetch)
+        month_entries += len(new_fetch)
+        print('Writing new submissions to disk')
+        start_timer = time.ctime()
+        with open(f'{month}.{start_year}.submissions.json', 'w') as output:
+            json.dump(new_fetch, output)
+        print(
+            f'Done. Writing submissions to disk completed after: {get_time_from_seconds(time.ctime()-start_timer)}')
+        new_fetch = None
+        print(
+            f'Starting comments fetch for {month} {start_year} [{start_timestamp} - {end_timestamp}] at {time.ctime()}...')
+        start_timer = time.ctime()
         new_fetch = list(api.search_comments(
             after=start_timestamp, before=end_timestamp, subreddit=sub))
         print(
-            f'Finished comments fetch for {month} {start_year}. This month contains {len(new_fetch)} comments.')
+            f'Finished comments fetch for {month} {start_year} after {get_time_from_seconds(time.ctime()-start_timer)}. This month contains {len(new_fetch)} comments.')
         total_entries += len(new_fetch)
         month_entries += len(new_fetch)
-        print(f'Writing new comments to disk')
+        print('Writing new comments to disk')
+        start_timer = time.ctime()
         with open(f'{month}.{start_year}.comments.json', 'w') as output:
             json.dump(new_fetch, output)
-
+        print(
+            f'Done. Writing comments to disk completed after: {get_time_from_seconds(time.ctime()-start_timer)}')
+        new_fetch = None
         print(
             f'Finished archiving {month_entries} entries for {month} {start_year}.')
         print(f'{total_entries} total entries written to disk')
@@ -93,6 +102,10 @@ def main():
     total_time_hours = floor((total_time / 60) - total_time_seconds)
     print(
         f'Done! Elapsed time: {total_time_hours}h, {total_time_minutes}m, {total_time_seconds}s')
+
+
+def get_time_from_seconds(sec):
+    return str(datetime.timedelta(seconds=(time.ctime() - sec)))
 
 
 def name_of_month(month_number):
