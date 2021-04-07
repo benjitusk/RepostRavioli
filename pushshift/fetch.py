@@ -67,7 +67,7 @@ def main():
         new_fetch = list(api.search_submissions(
             after=start_timestamp, before=end_timestamp, subreddit=sub))
         print(
-            f'Finished submissions fetch for {month} {start_year} after {get_time_from_seconds(time.time()-start_timer)}. This month contains {len(new_fetch)} submissions.')
+            f'Finished submissions fetch for {month} {start_year} after {get_time_from_seconds(start_timer)}. This month contains {len(new_fetch)} submissions.')
         total_entries += len(new_fetch)
         month_entries += len(new_fetch)
         print('Writing new submissions to disk')
@@ -75,7 +75,7 @@ def main():
         with open(f'{month}.{start_year}.submissions.json', 'w') as output:
             json.dump(new_fetch, output)
         print(
-            f'Done. Writing submissions to disk completed after: {get_time_from_seconds(time.time()-start_timer)}')
+            f'Done. Writing submissions to disk completed after: {get_time_from_seconds(start_timer)}')
         new_fetch = None
         print(
             f'Starting comments fetch for {month} {start_year} [{start_timestamp} - {end_timestamp}] at {time.ctime()}...')
@@ -83,7 +83,7 @@ def main():
         new_fetch = list(api.search_comments(
             after=start_timestamp, before=end_timestamp, subreddit=sub))
         print(
-            f'Finished comments fetch for {month} {start_year} after {get_time_from_seconds(time.time()-start_timer)}. This month contains {len(new_fetch)} comments.')
+            f'Finished comments fetch for {month} {start_year} after {get_time_from_seconds(start_timer)}. This month contains {len(new_fetch)} comments.')
         total_entries += len(new_fetch)
         month_entries += len(new_fetch)
         print('Writing new comments to disk')
@@ -91,7 +91,7 @@ def main():
         with open(f'{month}.{start_year}.comments.json', 'w') as output:
             json.dump(new_fetch, output)
         print(
-            f'Done. Writing comments to disk completed after: {get_time_from_seconds(time.time()-start_timer)}')
+            f'Done. Writing comments to disk completed after: {get_time_from_seconds(start_timer)}')
         new_fetch = None
         print(
             f'Finished archiving {month_entries} entries for {month} {start_year}.')
